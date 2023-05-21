@@ -1,0 +1,28 @@
+import RPi.GPIO as GPIO
+import time
+
+LED_PIN = 19
+
+
+# Set up GPIO
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED_PIN, GPIO.OUT)
+
+# Blink the LED for 10 seconds
+start_time = time.time()
+try:
+    while (time.time() - start_time) < 10:
+        GPIO.output(LED_PIN, GPIO.HIGH)  # Turn on the LED
+        time.sleep(0.2)  # Wait for 0.2 seconds
+        GPIO.output(LED_PIN, GPIO.LOW)  # Turn off the LED
+        time.sleep(0.2)  # Wait for 0.2 seconds
+
+except KeyboardInterrupt:
+    # Clean up GPIO on Ctrl+C exit
+    GPIO.cleanup()
+
+finally:
+    # Clean up GPIO after 10 seconds
+    GPIO.output(LED_PIN, GPIO.LOW)
+    GPIO.cleanup()

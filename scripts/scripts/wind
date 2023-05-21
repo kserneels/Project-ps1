@@ -1,0 +1,31 @@
+import RPi.GPIO as GPIO
+import time
+
+# Set up GPIO mode
+GPIO.setmode(GPIO.BCM)
+
+# Set up GPIO pins
+motor_pin1 = 22
+motor_pin2 = 25
+enable_pin = 27
+
+# Set up GPIO pin channels
+GPIO.setup(motor_pin1, GPIO.OUT)
+GPIO.setup(motor_pin2, GPIO.OUT)
+GPIO.setup(enable_pin, GPIO.OUT)
+
+# Set the motor to spin clockwise
+GPIO.output(motor_pin1, GPIO.HIGH)
+GPIO.output(motor_pin2, GPIO.LOW)
+
+# Enable the motor
+GPIO.output(enable_pin, GPIO.HIGH)
+
+# Wait for 10 seconds
+time.sleep(10)
+
+# Disable the motor
+GPIO.output(enable_pin, GPIO.LOW)
+
+# Clean up GPIO settings
+GPIO.cleanup()

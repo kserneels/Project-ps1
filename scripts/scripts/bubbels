@@ -1,0 +1,60 @@
+import RPi.GPIO as GPIO
+import time
+
+# set up GPIO mode
+GPIO.setmode(GPIO.BCM)
+
+# set pin numbers
+IN1 = 17
+IN2 = 18
+IN3 = 23
+IN4 = 24
+
+# set up pins as outputs
+GPIO.setup(IN1, GPIO.OUT)
+GPIO.setup(IN2, GPIO.OUT)
+GPIO.setup(IN3, GPIO.OUT)
+GPIO.setup(IN4, GPIO.OUT)
+
+# define the sequence of steps for the motor
+step_sequence = [[1,0,0,1],
+                 [1,0,0,0],
+                 [1,1,0,0],
+                 [0,1,0,0],
+                 [0,1,1,0],
+                 [0,0,1,0],
+                 [0,0,1,1],
+                 [0,0,0,1]]
+
+# set the initial step to 0
+step = 0
+
+# set the number of steps needed to turn 45 degrees
+steps_per_degree = 11.3778
+num_steps = int(steps_per_degree * 90)
+
+# loop through the steps to turn the motor
+for i in range(num_steps):
+    # set the GPIO pins to the current step in the sequence
+    GPIO.output(IN1, step_sequence[step][0])
+    GPIO.output(IN2, step_sequence[step][1])
+    GPIO.output(IN3, step_sequence[step][2])
+    GPIO.output(IN4, step_sequence[step][3])
+
+    # increment the step or reset to 0 if we've reached the end of the sequence
+    if step == 7:
+        step = 0
+    else:
+        step += 1
+
+    # wait a short amount of time before moving to the next step
+    time.sleep(0.002)
+
+# clean up the pins
+GPIO.output(IN1, GPIO.LOW)
+GPIO.output(IN2, GPIO.LOW)
+GPIO.output(IN3, GPIO.LOW)
+GPIO.output(IN4, GPIO.LOW)
+
+# reset GPIO settings
+GPIO.cleanup()
